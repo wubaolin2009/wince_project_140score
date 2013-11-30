@@ -1,0 +1,24 @@
+test:os_core.c os_cpu_a.S os_cpu_c.c os_mbox.c os_mem.c os_q.c os_sem.c os_task.c os_time.c ucos_ii.c
+# 把test.S编译成test.o目标文件
+	arm-elf-gcc -g -c -o os_core.o  os_core.c
+	arm-elf-gcc -g -c -o os_cpu_a.o os_cpu_a.S
+	arm-elf-gcc -g -c -o os_cpu_c.o os_cpu_c.c
+	arm-elf-gcc -g -c -o os_mbox.o  os_mbox.c
+	arm-elf-gcc -g -c -o os_mem.o   os_mem.c
+	arm-elf-gcc -g -c -o os_q.o     os_q.c
+	arm-elf-gcc -g -c -o os_sem.o   os_sem.c
+	arm-elf-gcc -g -c -o os_task.o  os_task.c
+	arm-elf-gcc -g -c -o os_time.o  os_time.c
+	arm-elf-gcc -g -c -o irq.o      irq.c
+
+	
+# 把test.o文件链接并根据test.lds文件定址，生成test_tmp.o
+	arm-elf-ld  -T 1.lds -g irq.o os_core.o os_cpu_a.o os_cpu_c.o os_mbox.o os_mem.o os_q.o os_sem.o os_task.o os_time.o  -o test_tmp.o
+	
+# 把test_tmp.o文件从elf格式变为二进制格式，输出文件为test.bin
+#	arm-elf-objcopy -O binary -S test_tmp.o 1.bin
+
+clean:
+	del 1.bin
+	del 1.o
+	del test_tmp.o
